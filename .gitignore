@@ -1,6 +1,6 @@
 venv/
 .env
 test_mongodb.py
-__pychache__
+__pychache__/
 Artifacts/
 logs/
