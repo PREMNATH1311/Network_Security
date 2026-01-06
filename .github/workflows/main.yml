@@ -8,7 +8,7 @@ on:
       - README.md
 
 jobs:
- integration:
+  integration:
     name: Continuous Integration
     runs-on: ubuntu-latest
 
@@ -27,59 +27,32 @@ jobs:
           pip install -r requirements.txt
 
       - name: Lint code
-        run: |
-          echo "Linting repository"
-          # flake8 .  (enable later)
+        run: echo "Linting repository"
 
       - name: Run unit tests
-        run: |
-          echo "Running unit tests"
-          # pytest tests/  (enable later)
- 
- build-and-push-ecr-image:
-    name: Continous Delivery
+        run: echo "Running unit tests"
+
+  build-and-push-ecr-image:
+    name: Continuous Delivery
     needs: integration
     runs-on: ubuntu-latest
+
     steps:
-        - name: checkout Code
-          uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-        - name: Install Utilities
-          run: |
-            sudo apt-get update
-            sudo apt-get install -y jp unzip
-        - name: Configure AWS credentials
-          uses: aws-actions/configure-aws-credentials@v1
-          with:
-            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws-region: ${{ secrets.AWS_REGION }}
+      - name: Install Utilities
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq unzip
 
-        - name: Login to Amazon ECR
-          id: login-ecr
-          uses: aws-actions/amazon-ect-login@v1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
