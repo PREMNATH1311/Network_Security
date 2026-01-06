@@ -2,17 +2,12 @@ FROM python:3.10-slim-buster
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && \
-    apt-get install -y awscli && \
-    rm -rf /var/lib/apt/lists/*
+# Install awscli via pip (NOT apt)
+RUN pip install --no-cache-dir awscli
 
-# Copy requirements first (better caching)
 COPY requirements.txt .
-
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
 COPY . .
 
 CMD ["python", "app.py"]
